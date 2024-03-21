@@ -52,14 +52,14 @@ class NBClassifier():
             'logistic_regression__C': np.logspace(-2, 2, 5),  # Regularization strength
             'logistic_regression__solver': ['liblinear', 'saga']  # Optimization algorithm
         }
-        self.nb_search = RandomizedSearchCV(estimator=self.nb_pipeline, param_distributions=param_grid, n_iter=10, cv=5,n_jobs=-1)
+        #self.nb_search = RandomizedSearchCV(estimator=self.nb_pipeline, param_distributions=param_grid, n_iter=10, cv=5,n_jobs=-1)
         #self.w2v = w2v.w2v                   
-        self.nb_search.fit(self.df_train['name'],self.df_train['label'])
-        self.model = self.nb_search.best_estimator_
+        self.nb_pipeline.fit(self.df_train['name'],self.df_train['label'])
+        #self.model = self.nb_search.best_estimator_
         print("Done Traning")
         
     def evaluate(self):
-        prediction = self.model.predict(self.df_eval['name'])
+        prediction = self.nb_pipeline.predict(self.df_eval['name'])
         print("Accuracy",accuracy_score(prediction, self.df_eval['label']))
         print("Recall",recall_score(prediction, self.df_eval['label']))
         print("Precision",precision_score(prediction, self.df_eval['label']))
@@ -72,7 +72,7 @@ class NBClassifier():
 
     def save_model(self):
         with open("model/nbc_model.pkl",'wb') as f:
-            dill.dump(self.model,f)
+            dill.dump(self.nb_pipeline,f)
 
         
 
