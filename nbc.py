@@ -1,4 +1,4 @@
-from sklearn import linear_model
+from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -14,7 +14,7 @@ from sklearnex import patch_sklearn
 patch_sklearn()
 
 
-class LogisticClassifier():
+class NBClassifier():
     def __init__(self) -> None:
         self.train_data_path = "data/cleaned_data/training/train.csv"
         self.eval_data_path = "data/cleaned_data/testing/localch.csv"
@@ -44,18 +44,18 @@ class LogisticClassifier():
     def train(self):
         print("Training")
         w2v = TfidfEmbeddingVectorizer(w2v_type="glove")
-        self.lr_pipeline  = Pipeline([
+        self.nb_pipeline  = Pipeline([
             ("word2vec_vectorizer", w2v),
-            ("logistic_regression", linear_model.LogisticRegression())
+            ("naive_bayes", GaussianNB())
         ])
         param_grid = {
             'logistic_regression__C': np.logspace(-2, 2, 5),  # Regularization strength
             'logistic_regression__solver': ['liblinear', 'saga']  # Optimization algorithm
         }
-        self.lr_search = RandomizedSearchCV(estimator=self.lr_pipeline, param_distributions=param_grid, n_iter=10, cv=5,n_jobs=-1)
+        self.nb_search = RandomizedSearchCV(estimator=self.nb_pipeline, param_distributions=param_grid, n_iter=10, cv=5,n_jobs=-1)
         #self.w2v = w2v.w2v                   
-        self.lr_search.fit(self.df_train['name'],self.df_train['label'])
-        self.model = self.lr_search.best_estimator_
+        self.nb_search.fit(self.df_train['name'],self.df_train['label'])
+        self.model = self.nb_search.best_estimator_
         print("Done Traning")
         
     def evaluate(self):
@@ -71,13 +71,13 @@ class LogisticClassifier():
 
 
     def save_model(self):
-        with open("model/lrc_model.pkl",'wb') as f:
+        with open("model/nbc_model.pkl",'wb') as f:
             dill.dump(self.model,f)
 
         
 
 if __name__ == '__main__':
-    lr_clf = LogisticClassifier()
+    lr_clf = NBClassifier()
     lr_clf.read_data()
     lr_clf.train()
     lr_clf.evaluate()

@@ -203,6 +203,7 @@ def extract_name_linkedin_url(linkedin_url):
 
 def main():
     print(normalized('Độc lập Tự do', folding=True))
+    print(normalized('Quyến, Văn Trần',folding= True))
 
 
 if __name__ == '__main__':
