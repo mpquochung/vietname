@@ -10,6 +10,8 @@ from tqdm import tqdm
 from sklearn.model_selection import RandomizedSearchCV
 import dill
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+
 from sklearnex import patch_sklearn
 patch_sklearn()
 

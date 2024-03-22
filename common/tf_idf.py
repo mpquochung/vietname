@@ -2,6 +2,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 import numpy as np
 from tqdm import tqdm
+from numpy.linalg import norm
+
 
 class TfidfEmbeddingVectorizer(object):
  
@@ -52,5 +54,9 @@ if __name__ == "__main__":
     trans = TfidfEmbeddingVectorizer()
 
     print(len(trans.word2vec))
-    trans.fit(['nguyen quang hung'], [1])
-    print(trans.transform(['nguyen quang hung']))
+    test = ['nguyen thi hong hanh','mai phan quoc hung']
+    trans.fit(test, [1,0])
+    a=trans.transform(test)
+    cosine = np.dot(a[0],a[1])/(norm(a[0])*norm(a[1]))
+    print(test)
+    print(cosine)
