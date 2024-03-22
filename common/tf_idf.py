@@ -10,8 +10,8 @@ class TfidfEmbeddingVectorizer(object):
     def __init__(self, w2v_type="glove"):
         
         if w2v_type == "glove":
-            self.dim = 100
-            with open("./data/glove.6B.100d.txt", "r", encoding="utf-8") as lines:
+            self.dim = 300
+            with open("./data/glove.42B.300d.txt", "r", encoding="utf-8") as lines:
                 self.w2v = {line.split()[0]: np.array([float(i) for i in line.split()[-self.dim:]])
                 for line in tqdm(lines)}
         else:

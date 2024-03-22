@@ -1,4 +1,4 @@
-from sklearn.naive_bayes import GaussianNB
+from sklearn import svm
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -46,7 +46,7 @@ class NBClassifier():
         w2v = TfidfEmbeddingVectorizer(w2v_type="glove")
         self.nb_pipeline  = Pipeline([
             ("word2vec_vectorizer", w2v),
-            ("naive_bayes", GaussianNB())
+            ("naive_bayes", svm.SVC())
         ])
         param_grid = {
             'logistic_regression__C': np.logspace(-2, 2, 5),  # Regularization strength
@@ -67,11 +67,11 @@ class NBClassifier():
         
         df_compare = self.df_eval
         df_compare['predict'] = prediction
-        df_compare.to_csv('predict/lr.csv')
+        df_compare.to_csv('predict/rf.csv')
 
 
     def save_model(self):
-        with open("model/nbc_model.pkl",'wb') as f:
+        with open("model/rf_model.pkl",'wb') as f:
             dill.dump(self.nb_pipeline,f)
 
         
