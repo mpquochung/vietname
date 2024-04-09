@@ -43,7 +43,7 @@ class NBClassifier():
 
     def train(self):
         print("Training")
-        w2v = TfidfEmbeddingVectorizer(w2v_type="glove")
+        w2v = TfidfEmbeddingVectorizer(w2v_type="glove300")
         self.nb_pipeline  = Pipeline([
             ("word2vec_vectorizer", w2v),
             ("naive_bayes", svm.SVC())

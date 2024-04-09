@@ -7,14 +7,14 @@ from sklearn.preprocessing import normalize
 
 class TfidfEmbeddingVectorizer(object):
  
-    def __init__(self, w2v_type="glove"):
+    def __init__(self, w2v_type="glove300"):
         
-        if w2v_type == "glove":
+        if w2v_type == "glove100":
             self.dim = 100
             with open("./data/glove.6B.100d.txt", "r", encoding="utf-8") as lines:
                 self.w2v = {line.split()[0]: np.array([float(i) for i in line.split()[-self.dim:]])
                 for line in tqdm(lines)}
-        else:
+        else if w2v_type== "glove300":
             self.dim = 300
             with open("./data/word2vec_vi_syllables_300dims.txt", "r", encoding="utf-8") as lines:
                 self.w2v = {line.split()[0]: np.array([float(i) for i in line.split()[-self.dim:]])
