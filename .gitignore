@@ -5,4 +5,7 @@ model/
 model
 predict/
 predict
+logs
+/logs/
+logs/
 *.pyc

@@ -10,8 +10,7 @@ from tqdm import tqdm
 from sklearn.model_selection import RandomizedSearchCV
 import dill
 import numpy as np
-from sklearn.preprocessing import StandardScaler
-
+from sklearn.preprocessing import StandardScaler, normalize
 from sklearnex import patch_sklearn
 patch_sklearn()
 
@@ -48,6 +47,7 @@ class LogisticClassifier():
         w2v = TfidfEmbeddingVectorizer(w2v_type="glove")
         self.lr_pipeline  = Pipeline([
             ("word2vec_vectorizer", w2v),
+            #('standardscaler', StandardScaler()),
             ("logistic_regression", linear_model.LogisticRegression())
         ])
         param_grid = {
