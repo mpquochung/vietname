@@ -2,17 +2,19 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 import numpy as np
 from tqdm import tqdm
+from numpy.linalg import norm
+from sklearn.preprocessing import normalize
 
 class TfidfEmbeddingVectorizer(object):
  
-    def __init__(self, w2v_type="glove"):
+    def __init__(self, w2v_type="glove300"):
         
-        if w2v_type == "glove":
+        if w2v_type == "glove100":
             self.dim = 100
             with open("./data/glove.6B.100d.txt", "r", encoding="utf-8") as lines:
                 self.w2v = {line.split()[0]: np.array([float(i) for i in line.split()[-self.dim:]])
                 for line in tqdm(lines)}
-        else:
+        else if w2v_type== "glove300":
             self.dim = 300
             with open("./data/word2vec_vi_syllables_300dims.txt", "r", encoding="utf-8") as lines:
                 self.w2v = {line.split()[0]: np.array([float(i) for i in line.split()[-self.dim:]])
@@ -41,16 +43,21 @@ class TfidfEmbeddingVectorizer(object):
 
     def transform(self, X):
         
-        return np.array([
+        trans =  np.array([
                 np.mean([self.word2vec[w] * self.word2weight[w]
                          for w in words.split() if w in self.word2vec] or
                         [np.zeros(self.dim)], axis=0)
                 for words in X
             ])
+        return  normalize(trans,norm='l2')
 
 if __name__ == "__main__":
     trans = TfidfEmbeddingVectorizer()
 
     print(len(trans.word2vec))
-    trans.fit(['nguyen quang hung'], [1])
-    print(trans.transform(['nguyen quang hung']))
+    test = ['nguyen thi hong hanh','mai phan quoc hung']
+    trans.fit(test, [1,0])
+    a=trans.transform(test)
+    cosine = np.dot(a[0],a[1])/(norm(a[0])*norm(a[1]))
+    print(test)
+    print(cosine)
